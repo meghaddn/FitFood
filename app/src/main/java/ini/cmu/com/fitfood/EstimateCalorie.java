@@ -116,7 +116,7 @@ public class EstimateCalorie extends Activity {
             }
         }
         IngName = IngName.substring(1);
-        Intent intent = new Intent(this, SearchFood.class);
+        Intent intent = new Intent(this, ViewReciepeList.class);
         intent.putExtra("Ingredients", IngName);
 
         startActivity(intent);

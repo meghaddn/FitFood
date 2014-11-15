@@ -183,7 +183,7 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
                         e.printStackTrace();
                     }
                 }
-                listAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.simplerow, itemname);
+                listAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.row, itemname);
                 mListView.setAdapter(listAdapter);
             } catch (Exception e) {
                 e.printStackTrace();
