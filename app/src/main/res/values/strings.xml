@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">FitFood</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="home_page">Hello User!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_search_food">SearchFood</string>
+    <string name="title_activity_home_page">HomePage</string>
+    <string name="title_activity_kitchen">Kitchen</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

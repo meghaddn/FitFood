@@ -16,9 +16,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".SearchFood"
+            android:label="@string/title_activity_search_food" >
+        </activity>
+        <activity
+            android:name=".HomePage"
+            android:label="@string/title_activity_home_page" >
+        </activity>
+        <activity
+            android:name=".Kitchen"
+            android:label="@string/title_activity_kitchen" >
+        </activity>
     </application>
 
 </manifest>

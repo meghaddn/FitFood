@@ -168,6 +168,7 @@ Google
      */
     @Override
     public void onConnected(Bundle connectionHint) {
+        String username = new String();
         // Reaching onConnected means we consider the user signed in.
         Log.i(TAG, "onConnected");
         //   Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
@@ -176,7 +177,7 @@ Google
         mSignOutButton.setEnabled(true);
 
         // Retrieve some profile information to personalize our app for   the user.
-        getProfileInformation();
+        username = getProfileInformation();
         // Toast.makeText(this, currentUser.getDisplayName(),      Toast.LENGTH_LONG).show();
         //  mStatus.setText(String.format(
         //  getResources().getString(R.string.signed_in_as),
@@ -187,6 +188,12 @@ Google
 
         // Indicate that the sign in process is complete.
         mSignInProgress = STATE_DEFAULT;
+
+        /*Call HomePage*/
+        Intent intent = new Intent(this, HomePage.class);
+        intent.putExtra("username", username);
+        this.startActivity(intent);
+
     }
 
     /* onConnectionFailed is called when our Activity could not connect to
@@ -322,7 +329,7 @@ allowing
     /**
      * Fetching user's information name, email, profile pic
      * */
-    private void getProfileInformation() {
+    private String getProfileInformation() {
         try {
 
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
@@ -339,6 +346,7 @@ allowing
                 Log.e(TAG, "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
+                return personName;
 
 
 
@@ -353,10 +361,12 @@ allowing
                 Toast.makeText(getApplicationContext(),
                         "Person information is null",
                         Toast.LENGTH_LONG).show();
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }
