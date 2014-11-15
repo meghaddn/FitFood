@@ -18,14 +18,8 @@ import org.json.JSONTokener;
 
 public class getData {
 
-	// calorie calcuation
-	// send the object to front end
+	public static List<JSONObject> result = new ArrayList<JSONObject>();//List of recipes
 
-	// object
-
-	/*
-	 * name Imageurl recipeurl time ingredients rating
-	 */
 
 	public static void main(String args[]) throws Exception {
 
@@ -33,7 +27,7 @@ public class getData {
 
 	}
 
-	public static void getRecipes(String params) throws Exception {
+	public static List<JSONObject> getRecipes(String params) throws Exception {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 
 		String url = "http://api.yummly.com/v1/api/recipes?_app_id=786acad9&_app_key=e0ed83d8d6e7026ae4cdfc436af2f838&q="
@@ -64,7 +58,6 @@ public class getData {
 
 		System.out.println(json);
 		
-		List<JSONObject> result = new ArrayList<JSONObject>();
 
 		JSONArray jarray = json.getJSONArray("matches");
 		System.out.println("*******************jsonarray************");
@@ -106,6 +99,7 @@ public class getData {
 
 		}
 		in.close();
-		System.out.println(result);
+		
+		return result;
 	}
 }
