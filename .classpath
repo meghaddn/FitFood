@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="app/src/androidTest/java"/>
+	<classpathentry kind="src" path="app/src/main/java"/>
+	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/jishavm/Downloads/commons-logging-1.2/commons-logging-1.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/jishavm/Downloads/commons-logging-1.2/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jishavm/Downloads/Matlab2014aMac/MathWorks/R2014aMAC/java/jarext/axis2/httpcore.jar"/>
+	<classpathentry kind="lib" path="/Users/jishavm/Downloads/apache-commons-httpclient.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
