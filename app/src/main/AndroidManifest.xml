@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ini.cmu.com.fitfood" >
 
+    <permission android:name="android.permission.GET_ACCOUNTS" >
+    </permission>
+    <permission android:name="android.permission.INTERNET" >
+    </permission>
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -32,6 +40,18 @@
         <activity
             android:name=".Kitchen"
             android:label="@string/title_activity_kitchen" >
+        </activity>
+        <activity
+            android:name=".Quantity"
+            android:label="@string/title_activity_quantity" >
+        </activity>
+        <activity
+            android:name=".NoteEditor"
+            android:label="@string/title_activity_note_editor" >
+        </activity>
+        <activity
+            android:name=".EstimateCalorie"
+            android:label="@string/title_activity_estimate_calorie" >
         </activity>
     </application>
 

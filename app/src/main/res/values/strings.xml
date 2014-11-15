@@ -8,5 +8,9 @@
     <string name="title_activity_home_page">HomePage</string>
     <string name="title_activity_kitchen">Kitchen</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_quantity">Quantity</string>
+    <string name="action_create">Create</string>
+    <string name="title_activity_note_editor">NoteEditor</string>
+    <string name="title_activity_estimate_calorie">EstimateCalorie</string>
 
 </resources>

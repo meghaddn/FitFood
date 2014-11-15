@@ -35,18 +35,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-
-public class SearchFood extends Activity implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
+public class EstimateCalorie extends Activity {
     private SearchView mSearchView;
     private ListView mListView;
     private HttpClient client;
     private HttpResponse response;
     private ArrayAdapter<String> listAdapter;
-    public static HashMap<String,List<String>> items ;
-    public static HashMap<String,List<String>> userSelected ;
+    public static HashMap<String,String> KitchenItems ;
+    //public static HashMap<String,List<String>> userSelected ;
     private Button DoneButton;
 
     @Override
@@ -55,12 +60,10 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
         setContentView(R.layout.activity_search_food);
         DoneButton = (Button) findViewById(R.id.donebutton);
         mSearchView = (SearchView) findViewById(R.id.searchView);
-        items= new HashMap<String, List<String>>();
-        userSelected = new  HashMap<String,List<String>>();
-        mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnItemClickListener(this);
+        KitchenItems= new HashMap<String, String>();
+
         client = new DefaultHttpClient();
-        setupSearchView();
+    //    setupSearchView();
         DoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,45 +71,55 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
                 startActivity(intent);
             }
         });
-    }
 
-    private void setupSearchView() {
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setSubmitButtonEnabled(false);
-    }
 
-    public boolean onQueryTextChange(String newText) {
-        if (TextUtils.isEmpty(newText)) {
-            //mListView.clearTextFilter();
-        } else {
-            //mListView.setFilterText(newText.toString());
-        }
-        return true;
-    }
-
-    public boolean onQueryTextSubmit(String query) {
-      //  String url = "http://www.google.com/search?q=mkyong";
-
+    for (int i=0; i < Kitchen.ingdt.size();i++) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority("api.nutritionix.com")
                 .appendPath("v1_1")
                 .appendPath("search")
-                .appendPath(query)
+                .appendPath(Kitchen.ingdt.get(i))
                 .appendQueryParameter("results", "0:6")
                 .appendQueryParameter("fields", "item_name,nf_calories")
-                .appendQueryParameter("appId","1204291e")
-                .appendQueryParameter("appKey","6b1c9af9fcd19d88c850dec9411c71a0");
+                .appendQueryParameter("appId", "1204291e")
+                .appendQueryParameter("appKey", "6b1c9af9fcd19d88c850dec9411c71a0");
         String URL = builder.build().toString();
         try {
             QueryResults qr = new QueryResults();
-            qr.execute(new String[] {URL});
-            return true;
+            qr.execute(new String[]{URL});
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+        int TotalCal = 3000;
+        int UserCal =0;
+        for (Map.Entry<String,List<String>> entry: SearchFood.userSelected.entrySet()){
+            List<String> val = entry.getValue();
+            UserCal = Integer.parseInt(val.get(1)) + UserCal;
+        }
+        int diff = TotalCal - UserCal;
+        int TotalIng=0;
+        String IngName = "";
+        Map<String,String> sortedMap = sortByComparator(KitchenItems);
+        for (Map.Entry<String,String> entry: sortedMap.entrySet()) {
+            String val = entry.getValue();
+            TotalIng = Integer.parseInt(val) + TotalIng;
+            if (diff > TotalIng ) {
+
+
+                IngName = IngName + "+" + entry.getKey();
+            }else{
+                TotalIng =  TotalIng - Integer.parseInt(val) ;
+            }
+        }
+        IngName = IngName.substring(1);
+        Intent intent = new Intent(this, SearchFood.class);
+        intent.putExtra("Ingredients", IngName);
+
+        startActivity(intent);
         /*
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet();
@@ -122,9 +135,29 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
             TODO Auto-generated catch block
             e.printStackTrace();
         }*/
-        return false;
+
     }
 
+    private static Map<String, String> sortByComparator(Map<String, String> unsortMap) {
+
+        // Convert Map to List
+        List<Map.Entry<String, String>> list =
+                new LinkedList<Map.Entry<String, String>>(unsortMap.entrySet());
+        // Sort list with comparator, to compare the Map values
+        Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
+            public int compare(Map.Entry<String, String> o1,
+                               Map.Entry<String, String> o2) {
+                return (o1.getValue()).compareTo(o2.getValue()) * (-1);
+            }
+        });
+        // Convert sorted map back to a Map
+        Map<String, String> sortedMap = new LinkedHashMap<String, String>();
+        for (Iterator<Map.Entry<String, String>> it = list.iterator(); it.hasNext();) {
+            Map.Entry<String, String> entry = it.next();
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
 
     private class QueryResults extends AsyncTask<String, Void, String>{
         @Override
@@ -160,7 +193,7 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
         protected void onPostExecute(String result) {
             result.getBytes();
             System.out.println(result);
-           // HashMap<String,String> items =  new HashMap<String, String>();
+            // HashMap<String,String> items =  new HashMap<String, String>();
             List<String> itemname = new ArrayList<String>();
             try {
                 JSONObject jsobj = new JSONObject(result);
@@ -173,35 +206,24 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
                         System.out.println("values " + obj1.toString());
                         String name = obj1.getString("item_name");
                         String calories = obj1.getString("nf_calories");
-                        String itemqty ="1";
-                        List<String> calqty = new ArrayList<String>();
-                        calqty.add(calories);
-                        calqty.add(itemqty);
-                        itemname.add(name);
-                        items.put(name, calqty);
+
+                       if (KitchenItems.containsKey(name)){
+                           KitchenItems.put(name,calories);
+                       }
+
+
+
                     }catch(JSONException e){
                         e.printStackTrace();
                     }
                 }
-                listAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.simplerow, itemname);
-                mListView.setAdapter(listAdapter);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
     }
-
-
-    public void onItemClick(AdapterView<?> a, View v, int position, long id){
-        //System.out.println("id : "+ id +" position"+position);
-        Intent quanIntent = new Intent(getApplicationContext(), Quantity.class);
-
-        quanIntent.putExtra("Position",position);
-        startActivity(quanIntent);
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -28,14 +28,12 @@ public class HomePage extends Activity {
         TextView1 = (TextView) findViewById(R.id.textView);
 
         String usergreet = new String();
-        usergreet = "Hello ";
-        usergreet += getIntent().getExtras().get("username").toString();
-        usergreet += "!";
+        usergreet = "Hello " + getIntent().getExtras().get("username").toString() + "!";
         TextView1.setText(usergreet);
         Button1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*call SearchFood*/
+
                 Intent intent = new Intent(getApplicationContext(), SearchFood.class);
                 startActivity(intent);
 
@@ -44,7 +42,7 @@ public class HomePage extends Activity {
         Button2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*call Kitchen*/
+
                 Intent intent = new Intent(getApplicationContext(), Kitchen.class);
                 startActivity(intent);
 

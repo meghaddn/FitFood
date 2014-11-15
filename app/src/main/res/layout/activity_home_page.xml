@@ -9,7 +9,6 @@
     tools:context="ini.cmu.com.fitfood.HomePage">
 
     <TextView
-        android:text="@string/home_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:editable="false"

@@ -188,7 +188,8 @@ Google
 
         // Indicate that the sign in process is complete.
         mSignInProgress = STATE_DEFAULT;
-
+        //Toast.makeText(this,username,Toast.LENGTH_LONG).show();
+        //System.out.println("name" + username);
         /*Call HomePage*/
         Intent intent = new Intent(this, HomePage.class);
         intent.putExtra("username", username);
@@ -230,8 +231,7 @@ select
     }
 
     /* Starts an appropriate intent or dialog for user interaction to resolve
-     * the current error preventing the user from being signed in.  This
-could
+     * the current error preventing the user from being signed in.  This could
      * be a dialog allowing the user to select an account, an activity
 allowing
      * the user to consent to the permissions being requested by your app, a
@@ -346,6 +346,7 @@ allowing
                 Log.e(TAG, "Name: " + personName + ", plusProfile: "
                         + personGooglePlusProfile + ", email: " + email
                         + ", Image: " + personPhotoUrl);
+
                 return personName;
 
 
