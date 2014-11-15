@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.*;
 import org.apache.http.*;
@@ -16,9 +18,18 @@ import org.json.JSONTokener;
 
 public class getData {
 
+	// calorie calcuation
+	// send the object to front end
+
+	// object
+
+	/*
+	 * name Imageurl recipeurl time ingredients rating
+	 */
+
 	public static void main(String args[]) throws Exception {
 
-		getRecipes("apple+Cocktail+orange");
+		getRecipes("fish");
 
 	}
 
@@ -30,9 +41,7 @@ public class getData {
 
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
 		con.setRequestMethod("GET");
-
 		int responseCode = con.getResponseCode();
 
 		System.out.println(responseCode);
@@ -50,22 +59,53 @@ public class getData {
 		}
 
 		System.out.println(response);
-		
 
 		JSONObject json = new JSONObject(response.toString());
 
 		System.out.println(json);
+		
+		List<JSONObject> result = new ArrayList<JSONObject>();
 
 		JSONArray jarray = json.getJSONArray("matches");
 		System.out.println("*******************jsonarray************");
-		System.out.println(jarray);
-		String[] subset = new String[10];
+		//System.out.println(jarray);
 		for (int i = 0; i < 10; i++) {
-			subset[i] = jarray.get(i).toString();
-			System.out.println(subset[i]);
+			JSONObject subset = new JSONObject();
+			JSONObject recipe = new JSONObject();
+
+			subset = jarray.getJSONObject(i);
+
+			recipe.put("name", subset.get("recipeName"));
+			
+			
+			ArrayList<String> list = new ArrayList<String>();     
+			JSONArray jsonArray = (JSONArray)subset.get("smallImageUrls"); 
+			if (jsonArray != null) { 
+			   int len = jsonArray.length();
+			   for (int m=0;m<len;m++){ 
+			    list.add(jsonArray.get(m).toString());
+			   } 
+			} 			
+			recipe.put("imageUrl", list.get(0));
+			
+			
+			String id = (String) subset.get("id");			
+			recipe.put("recipeUrl", "http://www.yummly.com/recipe/external/"+id);
+			
+			int time = (Integer) subset.get("totalTimeInSeconds");
+		
+			
+			recipe.put("timeInMinutes", time/60);
+			recipe.put("rating", subset.get("rating"));
+
+			
+			
+			//System.out.println(recipe.toString());
+			
+			result.add(recipe);
+
 		}
 		in.close();
-
-
+		System.out.println(result);
 	}
 }
