@@ -42,6 +42,7 @@
             android:label="@string/title_activity_kitchen" >
         </activity>
         <activity
+
             android:name=".Quantity"
             android:label="@string/title_activity_quantity" >
         </activity>
@@ -51,7 +52,12 @@
         </activity>
         <activity
             android:name=".EstimateCalorie"
-            android:label="@string/title_activity_estimate_calorie" >
+            android:label="@string/title_activity_estimate_calorie" ></activity>
+
+        <activity    android:name=".ProgressCheck"
+            android:label="@string/title_activity_progress_check" ></activity>
+        <activity    android:name=".ViewReciepeList"
+            android:label="@string/title_activity_progress_check" >
         </activity>
     </application>
 

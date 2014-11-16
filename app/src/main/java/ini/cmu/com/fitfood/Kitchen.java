@@ -1,6 +1,5 @@
 package ini.cmu.com.fitfood;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ public class Kitchen extends ListActivity {
     private NotesDataSource datasource;
     List<NoteItem> notesList;
     public static List<String> ingdt;
+    private Button DoneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,19 @@ public class Kitchen extends ListActivity {
         datasource = new NotesDataSource(this);
         ingdt = new ArrayList<String>();
         refreshDisplay();
+        DoneButton = (Button) findViewById(R.id.button);
+        DoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i=0; i< notesList.size();i++) {
+                    ingdt.add(notesList.get(i).getText());
+                }
+                Intent intent = new Intent(getApplicationContext(), EstimateCalorie.class);
+
+
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -47,9 +61,7 @@ public class Kitchen extends ListActivity {
         notesList = datasource.findAll();
         ArrayAdapter<NoteItem> adapter =
                 new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
-        for (int i=0; i< notesList.size();i++) {
-            ingdt.add(notesList.get(i).getText());
-        }
+
         setListAdapter(adapter);
 
     }

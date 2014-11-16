@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#580000"
     tools:context="ini.cmu.com.fitfood.NoteEditor">
 
     <EditText
@@ -10,6 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:ems="10"
+        android:textColor="#FFFFFF"
         android:singleLine="false"
         android:gravity="top"
         android:inputType="textMultiLine">

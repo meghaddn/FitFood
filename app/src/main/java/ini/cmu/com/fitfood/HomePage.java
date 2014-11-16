@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.content.Intent;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ public class HomePage extends Activity {
         TextView1 = (TextView) findViewById(R.id.textView);
 
         String usergreet = new String();
-        usergreet = "Hello " + getIntent().getExtras().get("username").toString() + "!";
+         usergreet = "Hello Harvey" ;
         TextView1.setText(usergreet);
         Button1.setOnClickListener(new OnClickListener() {
             @Override

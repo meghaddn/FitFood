@@ -1,35 +1,28 @@
 package ini.cmu.com.fitfood;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -37,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class SearchFood extends Activity implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
@@ -64,6 +58,14 @@ public class SearchFood extends Activity implements SearchView.OnQueryTextListen
         DoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                double UserCal =0;
+                System.out.println("in srch" + userSelected.keySet().size());
+                for (Map.Entry<String,List<String>> entry: userSelected.entrySet()){
+                    List<String> val = entry.getValue();
+                    System.out.println("Key" + entry.getKey() + " value" + entry.getValue());
+                    UserCal = Double.parseDouble(val.get(0).toString()) + UserCal;
+                }
+                System.out.println("cal222 "+ UserCal);
                 Intent intent = new Intent(getApplicationContext(), HomePage.class);
                 startActivity(intent);
             }

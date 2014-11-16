@@ -37,10 +37,12 @@ public class Quantity extends Activity {
         calqty = new ArrayList<String>();
 
         String position = getIntent().getExtras().get("Position").toString();
+        System.out.println("pos" + position);
         List keys = new ArrayList(SearchFood.items.keySet());
         for (int i=0; i< keys.size();i++){
             if (i == Integer.parseInt(position)){
                  name = keys.get(i).toString();
+                System.out.println(" name in key "+ name);
                calqty = SearchFood.items.get(name);
                 qty = calqty.get(1);
             }
@@ -64,17 +66,20 @@ public class Quantity extends Activity {
                 quantity.setText(qty);
             }
         });
-        final List<String> qtyList = new ArrayList<String>();
+
         Buttonback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                int calorie = Integer.parseInt(calqty.get(0));
+                List<String> qtyList = new ArrayList<String>();
+                double calorie = Double.parseDouble(calqty.get(0));
                 calorie = calorie * Integer.parseInt(qty);
-                qtyList.add(Integer.toString(calorie));
+                qtyList.add(Double.toString(calorie));
                 qtyList.add(qty);
+                System.out.println(" name in key outside "+ name);
+                System.out.println("qty" + qty + " calorie" + calorie);
                 //SearchFood.items.put(name,qtyList);
                 SearchFood.userSelected.put(name,qtyList);
+                System.out.println(" in qty" + SearchFood.userSelected.keySet().size());
                 Intent intent = new Intent(getApplicationContext(), SearchFood.class);
                 //intent.putExtra("quantity", amount);
                 startActivity(intent);

@@ -99,7 +99,7 @@ public class ViewReciepeList extends ListActivity implements
         setContentView(R.layout.activity_view_reciepe_list);
         System.out.println("onCreate");
 
-
+        String ing = getIntent().getExtras().get("Ingredients").toString();
 
 
 
@@ -119,7 +119,7 @@ public class ViewReciepeList extends ListActivity implements
         System.out.println("after imageview");
         try {
             getURLConnection urlget = new getURLConnection();
-            urlget.execute(new String[] {""});
+            urlget.execute(new String[] {ing});
         } catch (Exception ex) {
 
         }
@@ -134,7 +134,7 @@ public class ViewReciepeList extends ListActivity implements
             String result = "";
             List<Bitmap> bitmap=new ArrayList<Bitmap>();
             try{
-            urlobj = getData.getRecipes("fish");
+            urlobj = getData.getRecipes(urls[0]);
                 System.out.println("len" + urlobj.size());
                 for (int i=0;i<10;i++){
                     JSONObject firstobj=urlobj.get(i);

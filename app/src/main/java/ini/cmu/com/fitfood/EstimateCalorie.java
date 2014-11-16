@@ -1,35 +1,26 @@
 package ini.cmu.com.fitfood;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -53,24 +44,20 @@ public class EstimateCalorie extends Activity {
     public static HashMap<String,String> KitchenItems ;
     //public static HashMap<String,List<String>> userSelected ;
     private Button DoneButton;
+    private Button btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_food);
-        DoneButton = (Button) findViewById(R.id.donebutton);
-        mSearchView = (SearchView) findViewById(R.id.searchView);
+        setContentView(R.layout.activity_estimate_calorie);
+        DoneButton = (Button) findViewById(R.id.button);
+        btn2 = (Button) findViewById(R.id.button2);
+
+       // mSearchView = (SearchView) findViewById(R.id.searchView);
         KitchenItems= new HashMap<String, String>();
 
         client = new DefaultHttpClient();
     //    setupSearchView();
-        DoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomePage.class);
-                startActivity(intent);
-            }
-        });
 
 
     for (int i=0; i < Kitchen.ingdt.size();i++) {
@@ -85,6 +72,7 @@ public class EstimateCalorie extends Activity {
                 .appendQueryParameter("appId", "1204291e")
                 .appendQueryParameter("appKey", "6b1c9af9fcd19d88c850dec9411c71a0");
         String URL = builder.build().toString();
+        KitchenItems.put(Kitchen.ingdt.get(i),"1");
         try {
             QueryResults qr = new QueryResults();
             qr.execute(new String[]{URL});
@@ -94,32 +82,56 @@ public class EstimateCalorie extends Activity {
         }
     }
 
-        int TotalCal = 3000;
-        int UserCal =0;
-        for (Map.Entry<String,List<String>> entry: SearchFood.userSelected.entrySet()){
-            List<String> val = entry.getValue();
-            UserCal = Integer.parseInt(val.get(1)) + UserCal;
-        }
-        int diff = TotalCal - UserCal;
-        int TotalIng=0;
-        String IngName = "";
-        Map<String,String> sortedMap = sortByComparator(KitchenItems);
-        for (Map.Entry<String,String> entry: sortedMap.entrySet()) {
-            String val = entry.getValue();
-            TotalIng = Integer.parseInt(val) + TotalIng;
-            if (diff > TotalIng ) {
+         DoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double TotalCal = 3000.00;
+                double UserCal =0;
+                for (Map.Entry<String,List<String>> entry: SearchFood.userSelected.entrySet()){
+                    List<String> val = entry.getValue();
+                    UserCal = Double.parseDouble(val.get(1)) + UserCal;
+                }
+                double diff = TotalCal - UserCal;
+                double TotalIng=0;
+                String IngName = "";
+                Map<String,String> sortedMap = sortByComparator(KitchenItems);
+                for (Map.Entry<String,String> entry: sortedMap.entrySet()) {
+                    String val = entry.getValue();
+                    TotalIng = Integer.parseInt(val) + TotalIng;
+                    if (diff > TotalIng ) {
 
 
-                IngName = IngName + "+" + entry.getKey();
-            }else{
-                TotalIng =  TotalIng - Integer.parseInt(val) ;
+                        IngName = IngName + "+" + entry.getKey();
+                    }else{
+                        TotalIng =  TotalIng - Integer.parseInt(val) ;
+                    }
+                }
+                IngName = IngName.substring(1);
+                System.out.println("IngName" + IngName);
+                Intent intent = new Intent(getApplicationContext(), ViewReciepeList.class);
+                intent.putExtra("Ingredients", IngName);
+
+                startActivity(intent);
             }
-        }
-        IngName = IngName.substring(1);
-        Intent intent = new Intent(this, ViewReciepeList.class);
-        intent.putExtra("Ingredients", IngName);
+        });
 
-        startActivity(intent);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                double UserCal =0;
+                for (Map.Entry<String,List<String>> entry: SearchFood.userSelected.entrySet()){
+                    List<String> val = entry.getValue();
+                    UserCal = Double.parseDouble(val.get(0)) + UserCal;
+                }
+                System.out.println("cal "+ UserCal);
+                Intent intent = new Intent(getApplicationContext(), ProgressCheck.class);
+                intent.putExtra("UserCal",UserCal);
+
+                startActivity(intent);
+            }
+        });
+
+
         /*
         HttpClient client = new DefaultHttpClient();
         HttpGet get = new HttpGet();
@@ -206,12 +218,12 @@ public class EstimateCalorie extends Activity {
                         System.out.println("values " + obj1.toString());
                         String name = obj1.getString("item_name");
                         String calories = obj1.getString("nf_calories");
-
+                        System.out.println(" name "+ name+" KitchenItems.containsKey(name) "+ KitchenItems.containsKey(name));
                        if (KitchenItems.containsKey(name)){
                            KitchenItems.put(name,calories);
                        }
 
-
+                        System.out.println("calories" + calories);
 
                     }catch(JSONException e){
                         e.printStackTrace();

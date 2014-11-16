@@ -80,10 +80,22 @@ public class getData {
             String id = (String) subset.get("id");
             recipe.put("recipeUrl", "http://www.yummly.com/recipe/external/"+id);
 
-            int time = (Integer) subset.get("totalTimeInSeconds");
+            //int time = (Integer) subset.get("totalTimeInSeconds");
+            if(subset.get("totalTimeInSeconds").equals(null)){
+                recipe.put("timeInMinutes", "NA");
+            }
+            else{
+                int time = (Integer) subset.get("totalTimeInSeconds");
 
+                System.out.println(time);
 
-            recipe.put("timeInMinutes", time/60);
+                //if(time!=null){
+                recipe.put("timeInMinutes", time/60);
+
+                //}
+            }
+
+            //recipe.put("timeInMinutes", time/60);
             recipe.put("rating", subset.get("rating"));
 
 
